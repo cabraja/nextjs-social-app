@@ -7,7 +7,7 @@ export default function Page() {
     <div className="h-screen w-full flex items-stretch">
       <div className="flex-1 flex items-center justify-center bg-background">
         <div className="flex flex-col items-start w-3/5">
-          <div className="flex items-center justify-start gap-x-2">
+          <div className="flex items-center justify-start gap-x-2 -ms-[68px]">
             <Image src={icon} alt="Bubbles" width={60} height={60} />
             <h1 className="font-semibold text-4xl">
               Welcome Back To BitBubble!

@@ -6,5 +6,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function isMacOs(): boolean {
-  return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+  if (typeof window !== "undefined" && window.navigator) {
+    if (navigator.platform.toUpperCase().includes("MAC")) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
 }
