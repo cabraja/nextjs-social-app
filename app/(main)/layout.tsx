@@ -1,18 +1,19 @@
 import Header from "@/components/header/header";
 import SideNavigation from "@/components/side-navigation";
-import { Separator } from "@/components/ui/separator";
+import getTopics from "@/actions/get-topics";
 
-function MainLayout({ children }: { children: React.ReactNode }) {
+async function MainLayout({ children }: { children: React.ReactNode }) {
+  const topics = await getTopics();
   return (
     <>
       <Header />
-      <div className="main-layout w-full flex items-start gap-x-8 px-[6%] py-[4%]">
-        <div className="w-1/5 hidden sm:block relative">
-          <div className="sm:sticky top-0 block bg-zinc-700 rounded-xl h-[60vh]">
-            <SideNavigation />
-          </div>
+      <div className="main-layout h-screen w-full flex items-stretch gap-x-8 py-[2%] px-[8%]">
+        <div className="w-1/5 hidden sm:block h-full">
+          <SideNavigation topics={topics} />
         </div>
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 overflow-y-scroll scrollbar-hide">
+          {children}
+        </div>
       </div>
     </>
   );

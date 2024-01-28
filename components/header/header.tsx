@@ -7,7 +7,7 @@ import UserMenu from "./user-menu";
 
 function Header() {
   return (
-    <div className="flex w-full py-2 md:px-8 px-3 sticky top-0 bg-secondary">
+    <div className="flex w-full py-2 md:px-8 px-3 bg-secondary z-30">
       <div className="flex items-center gap-x-1 w-[25%]">
         <Image src={icon} alt="Bubbles" width={40} height={40} />
         <h1 className="font-semibold text-2xl sm:block hidden">BitBubble</h1>

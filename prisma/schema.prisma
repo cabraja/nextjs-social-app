@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ENUMS
+
+enum Role {
+  USER
+  MODERATOR
+  OWNER
+}
+
+enum BubbleAccessType {
+  PUBLIC
+  PRIVATE
+}
+
+// MODELS
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  email     String   @unique
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  members   Member[]
+}
+
+model Bubble {
+  id           String           @id @default(uuid())
+  ownerId      String
+  name         String           @unique
+  description  String
+  imageUrl     String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  accessType   BubbleAccessType
+  members      Member[]
+  BubbleTopics BubbleTopics[]
+}
+
+model BubbleTopics {
+  bubble   Bubble @relation(fields: [bubbleId], references: [id])
+  bubbleId String
+  topic    Topic  @relation(fields: [topicId], references: [id])
+  topicId  String
+
+  @@id([bubbleId, topicId])
+}
+
+model Topic {
+  id           String         @id @default(uuid())
+  name         String         @unique
+  BubbleTopics BubbleTopics[]
+}
+
+model Member {
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  bubble    Bubble   @relation(fields: [bubbleId], references: [id])
+  bubbleId  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([profileId, bubbleId])
+}
