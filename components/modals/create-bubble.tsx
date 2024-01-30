@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -25,6 +26,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BubbleAccessType } from "@prisma/client";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   name: z
@@ -48,9 +51,17 @@ function CreateBubbleModal() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const loadingToast = toast.loading("Loading...");
+    try {
+      await axios.post("/api/bubbles", values);
+      toast.dismiss(loadingToast);
+      toast.success("Bubble created!");
+    } catch (error: any) {
+      toast.dismiss(loadingToast);
+      toast.error(error.response.data);
+    }
+  };
 
   const handleClose = () => {
     onClose();
@@ -67,32 +78,64 @@ function CreateBubbleModal() {
         <DialogHeader>
           <DialogTitle>Create a Bubble</DialogTitle>
           <DialogDescription>
-            Create a community of your own to discuss your interests.
+            Create a community of your own to discuss your interests. First,
+            enter some basic information and after that you can edit the
+            details.
           </DialogDescription>
         </DialogHeader>
         <div className="py-2">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bubble Name</FormLabel>
+                    <FormLabel className="dark:text-white text-black">
+                      Bubble Name
+                    </FormLabel>
                     <FormControl>
-                      <Input className="text-sm" placeholder="Enter a name" />
+                      <Input
+                        className="text-sm"
+                        {...field}
+                        placeholder="What will your bubble be called?"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="dark:text-white text-black">
+                      Description{" "}
+                      <span className="text-xs text-zinc-400">
+                        (you can always edit this later)
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="text-sm"
+                        {...field}
+                        placeholder="What is your bubble about?"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="my-5"></div>
               <FormField
                 control={form.control}
                 name="accessType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Access type</FormLabel>
+                    <FormLabel> Who can make posts in your bubble?</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -102,22 +145,21 @@ function CreateBubbleModal() {
                           <FormControl>
                             <RadioGroupItem value={BubbleAccessType.PUBLIC} />
                           </FormControl>
-                          <FormLabel className="font-normal">Anyone</FormLabel>
+                          <FormLabel className="font-normal text-zinc-400">
+                            Anyone
+                          </FormLabel>
                         </FormItem>
 
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
                             <RadioGroupItem value={BubbleAccessType.PRIVATE} />
                           </FormControl>
-                          <FormLabel className="font-normal">
+                          <FormLabel className="font-normal text-zinc-400">
                             Only users approved by owner or moderators.
                           </FormLabel>
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
-                    <FormDescription>
-                      Who can make posts in your bubble?
-                    </FormDescription>
                   </FormItem>
                 )}
               />

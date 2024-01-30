@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ModalProvider from "@/components/providers/modal-provider";
+import ToastProvider from "@/components/providers/toast-provider";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
           >
             {children}
             <ModalProvider />
+            <ToastProvider />
           </ThemeProvider>
         </body>
       </html>

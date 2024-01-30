@@ -41,7 +41,7 @@ model Bubble {
   ownerId      String
   name         String           @unique
   description  String
-  imageUrl     String
+  imageUrl     String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   accessType   BubbleAccessType
