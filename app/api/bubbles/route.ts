@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return Response.json({ bubble }, { status: 201 });
+    return Response.json(bubble, { status: 201 });
   } catch (error) {
     return new Response("Error occured on the server.", { status: 500 });
   }

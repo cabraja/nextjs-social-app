@@ -20,14 +20,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import icon from "@/public/img/bubble2-svg.svg";
 
 import useModal from "@/hooks/use-modal";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { BubbleAccessType } from "@prisma/client";
+import { Bubble, BubbleAccessType } from "@prisma/client";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { AxiosReponse } from "@/types/axios";
 
 const formSchema = z.object({
   name: z
@@ -39,8 +44,10 @@ const formSchema = z.object({
 });
 
 function CreateBubbleModal() {
+  const [disabled, setDisabled] = useState(false);
   const { isOpen, type, onClose } = useModal();
   const isModalOpen = isOpen && type === "createBubble";
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,13 +60,21 @@ function CreateBubbleModal() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const loadingToast = toast.loading("Loading...");
+    setDisabled(true);
     try {
-      await axios.post("/api/bubbles", values);
+      const response: AxiosReponse<Bubble> = await axios.post(
+        "/api/bubbles",
+        values
+      );
+      setDisabled(true);
+      router.push(`/b/${response.data.id}`);
       toast.dismiss(loadingToast);
-      toast.success("Bubble created!");
+      toast.success("Success! Redirecting...");
     } catch (error: any) {
       toast.dismiss(loadingToast);
       toast.error(error.response.data);
+    } finally {
+      setDisabled(false);
     }
   };
 
@@ -76,7 +91,10 @@ function CreateBubbleModal() {
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Create a Bubble</DialogTitle>
+          <DialogTitle className="flex items-center gap-x-2">
+            <Image src={icon} alt="Bubbles2" width={30} height={30} />
+            Create a Bubble
+          </DialogTitle>
           <DialogDescription>
             Create a community of your own to discuss your interests. First,
             enter some basic information and after that you can edit the
@@ -165,7 +183,9 @@ function CreateBubbleModal() {
               />
 
               <DialogFooter>
-                <Button type="submit">Submit</Button>
+                <Button disabled={disabled} type="submit">
+                  Submit
+                </Button>
               </DialogFooter>
             </form>
           </Form>

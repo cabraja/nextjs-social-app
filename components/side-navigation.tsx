@@ -14,7 +14,7 @@ type SideNavigationProps = {
 
 function SideNavigation({ topics }: SideNavigationProps) {
   return (
-    <div className="bg-zinc-900 rounded-xl px-5 py-5">
+    <div className="bg-zinc-900 rounded-lg px-5 py-5">
       <h3 className="text-lg font-semibold text-neutral-200">Popular Topics</h3>
       <Separator className="mt-3" />
       <Accordion type="single" collapsible>
