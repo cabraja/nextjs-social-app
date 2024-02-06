@@ -1,17 +1,6 @@
 import HomepageTrending from "@/components/homepage/homepage-trending";
-import { initialProfile } from "@/lib/initial-profile";
 
 export default async function Home() {
-  const profile = await initialProfile();
-
-  if (!profile) {
-    return (
-      <div>
-        <h1>To do...</h1>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full flex flex-col gap-y-5">
       <div className="w-full">

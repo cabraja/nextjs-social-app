@@ -1,24 +1,8 @@
 import { redirectToSignIn, currentUser } from "@clerk/nextjs";
 import db from "@/lib/db";
+import { User } from "@clerk/nextjs/server";
 
-export const initialProfile = async () => {
-  const user = await currentUser();
-
-  if (!user) {
-    redirectToSignIn();
-    return;
-  }
-
-  const profile = await db.profile.findFirst({
-    where: {
-      userId: user.id,
-    },
-  });
-
-  if (profile) {
-    return profile;
-  }
-
+export const createProfile = async (user: User) => {
   const newProfile = await db.profile.create({
     data: {
       userId: user.id,

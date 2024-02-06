@@ -68,6 +68,7 @@ function CreateBubbleModal() {
       );
       setDisabled(true);
       router.push(`/b/${response.data.id}`);
+      onClose();
       toast.dismiss(loadingToast);
       toast.success("Success! Redirecting...");
     } catch (error: any) {

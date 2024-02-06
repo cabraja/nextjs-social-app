@@ -1,4 +1,4 @@
-import currentProfile from "@/lib/currentProfile";
+import currentProfile from "@/lib/current-profile";
 import { validateNewBubble } from "@/lib/valdiators";
 import db from "@/lib/db";
 

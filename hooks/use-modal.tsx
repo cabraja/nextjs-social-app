@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type ModalType = "createBubble" | "deleteBubble";
+type ModalType = "createBubble" | "deleteBubble" | "addBubbleImage";
 
 type useModalProps = {
   isOpen: boolean;
