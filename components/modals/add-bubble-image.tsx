@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,12 +12,20 @@ import { UploadButton } from "@/lib/uploadthing";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import axios from "axios";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 function AddBubbleImageModal() {
+  const { isOpen, type, onClose, data } = useModal();
   const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const { isOpen, type, onClose } = useModal();
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const router = useRouter();
   const isModalOpen = isOpen && type === "addBubbleImage";
+
+  useEffect(() => {
+    if (data.fileUrl && isModalOpen) setFileUrl(data.fileUrl);
+  }, [isOpen]);
 
   const handleClose = () => {
     onClose();
@@ -25,21 +33,44 @@ function AddBubbleImageModal() {
 
   const handleUploadComplete = async (res: any) => {
     setFileUrl(res[0].url);
-    try {
-      // ADD IMAGE
-    } catch (error) {}
   };
 
   const handleDelete = async () => {
     try {
+      setFileUrl(null);
+      await axios.patch("/api/bubbles/images/main", {
+        fileUrl: null,
+        bubbleId: data.bubbleId,
+      });
       await axios.delete("/api/uploadthing", {
         data: {
           url: fileUrl,
         },
       });
-      setFileUrl(null);
+      router.refresh();
+      toast.success("Image deleted.");
+      setIsConfirmed(false);
     } catch (error) {
-      console.log("NOPE");
+      setIsConfirmed(false);
+      toast.error("Error occured.");
+    }
+  };
+
+  const handleConfirm = async () => {
+    setIsConfirmed(true);
+
+    try {
+      await axios.patch("/api/bubbles/images/main", {
+        fileUrl: fileUrl,
+        bubbleId: data.bubbleId,
+      });
+      onClose();
+      toast.success("Success!");
+      router.refresh();
+      setIsConfirmed(false);
+    } catch (error) {
+      setIsConfirmed(false);
+      toast.error("Error occured.");
     }
   };
 
@@ -60,19 +91,20 @@ function AddBubbleImageModal() {
         {fileUrl && (
           <div className="w-4/5 aspect-square mx-auto">
             <div className="w-full aspect-square h-full rounded-full bg-slate-500 relative">
-              <Image
-                className="w-full h-full rounded-full object-cover"
-                src={fileUrl}
-                fill={true}
-                alt="New Image Preview"
-              />
+              {!isConfirmed && (
+                <Image
+                  className="w-full h-full rounded-full object-cover"
+                  src={fileUrl}
+                  fill={true}
+                  alt="New Image Preview"
+                />
+              )}
 
-              <div
-                onClick={() => handleDelete()}
-                className="absolute bg-red-700 rounded-full p-2 top-1 right-2 hover:opacity-80 transition cursor-pointer"
-              >
-                <X className="w-4 h-4 text-white" />
-              </div>
+              {isConfirmed && (
+                <div className="h-full w-full rounded-full flex items-center justify-center animate-spin">
+                  <Loader2 className="w-10 h-10" />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -87,6 +119,28 @@ function AddBubbleImageModal() {
                 toast.error("Image upload failed.");
               }}
             />
+          </div>
+        )}
+
+        {fileUrl && (
+          <div className="flex md:flex-row flex-col gap-x-3">
+            <Button
+              disabled={isConfirmed}
+              onClick={() => handleConfirm()}
+              className="flex-1"
+              type="button"
+            >
+              Confirm
+            </Button>
+            <Button
+              disabled={isConfirmed}
+              onClick={() => handleDelete()}
+              className="flex-1"
+              variant="destructive"
+              type="button"
+            >
+              Delete
+            </Button>
           </div>
         )}
       </DialogContent>
