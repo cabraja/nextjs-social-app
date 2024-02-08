@@ -3,6 +3,8 @@ import { currentUser } from "@clerk/nextjs";
 import { ImagePlus } from "lucide-react";
 import BubbleHeaderImageAuth from "./bubble-header-image-auth";
 import BubbleHeaderImage from "./bubble-header-image";
+import BubbleHeaderCoverButton from "./bubble-header-cover-button";
+import { cn } from "@/lib/utils";
 
 type BubbleHeaderProps = {
   bubble: BubbleWithMembers;
@@ -12,14 +14,18 @@ export async function BubbleHeader({ bubble }: BubbleHeaderProps) {
   const user = await currentUser();
   return (
     <div
-      style={{ backgroundImage: `src(${bubble?.coverUrl})` || "none" }}
-      className="w-full bg-cover rounded-lg relative bg-zinc-500"
+      style={{ backgroundImage: `url(${bubble?.coverUrl})` || "none" }}
+      className="w-full bg-cover bg-center rounded-lg relative bg-zinc-500"
     >
-      <div className="w-full h-full flex rounded-lg bg-neutral-900/90 pb-3 px-5 relative">
+      <div
+        className={cn(
+          "w-full h-full flex rounded-lg pb-3 px-5 relative",
+          bubble?.coverUrl && "bg-neutral-900/60",
+          !bubble?.coverUrl && "bg-neutral-900/90"
+        )}
+      >
         {bubble?.owner.userId === user?.id && (
-          <div className="absolute top-2 right-3 rounded-full bg-slate-500 p-2 cursor-pointer hover:opacity-65 transition">
-            <ImagePlus className="w-4 h-4 text-slate-400" />
-          </div>
+          <BubbleHeaderCoverButton bubble={bubble} />
         )}
 
         <div

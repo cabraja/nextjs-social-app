@@ -13,6 +13,7 @@ function BubbleHeaderImage({ bubble }: BubbleHeaderImageProps) {
           fill
           src={bubble?.imageUrl}
           alt={bubble?.name}
+          sizes="(min-width: 800px) 30vw, (max-width: 799px) 45vw"
           className="object-cover h-full w-full group-hover:scale-110 transition"
         />
       ) : (

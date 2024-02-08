@@ -1,6 +1,10 @@
 import { create } from "zustand";
 
-type ModalType = "createBubble" | "deleteBubble" | "addBubbleImage";
+type ModalType =
+  | "createBubble"
+  | "deleteBubble"
+  | "addBubbleImage"
+  | "addBubbleCover";
 
 type PropsData = {
   bubbleId?: string;

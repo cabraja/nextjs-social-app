@@ -21,7 +21,8 @@ function AddBubbleImageModal() {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const router = useRouter();
-  const isModalOpen = isOpen && type === "addBubbleImage";
+  const isModalOpen =
+    isOpen && (type === "addBubbleImage" || type === "addBubbleCover");
 
   useEffect(() => {
     if (data.fileUrl && isModalOpen) setFileUrl(data.fileUrl);
@@ -36,9 +37,13 @@ function AddBubbleImageModal() {
   };
 
   const handleDelete = async () => {
+    const url =
+      type === "addBubbleImage"
+        ? "/api/bubbles/images/main"
+        : "/api/bubbles/images/cover";
     try {
       setFileUrl(null);
-      await axios.patch("/api/bubbles/images/main", {
+      await axios.patch(url, {
         fileUrl: null,
         bubbleId: data.bubbleId,
       });
@@ -58,9 +63,13 @@ function AddBubbleImageModal() {
 
   const handleConfirm = async () => {
     setIsConfirmed(true);
+    const url =
+      type === "addBubbleImage"
+        ? "/api/bubbles/images/main"
+        : "/api/bubbles/images/cover";
 
     try {
-      await axios.patch("/api/bubbles/images/main", {
+      await axios.patch(url, {
         fileUrl: fileUrl,
         bubbleId: data.bubbleId,
       });
@@ -82,7 +91,9 @@ function AddBubbleImageModal() {
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Change Bubble Image</DialogTitle>
+          <DialogTitle>
+            Change Bubble {type === "addBubbleCover" ? "Cover" : ""} Image
+          </DialogTitle>
           <DialogDescription>
             Give your bubble some personality! Add a picture by clicking below.
           </DialogDescription>
@@ -96,6 +107,7 @@ function AddBubbleImageModal() {
                   className="w-full h-full rounded-full object-cover"
                   src={fileUrl}
                   fill={true}
+                  sizes="(min-width: 1px) 90vw"
                   alt="New Image Preview"
                 />
               )}
