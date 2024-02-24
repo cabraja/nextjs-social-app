@@ -12,7 +12,7 @@ export async function BubblePage({ params }: { params: { bubbleId: string } }) {
       <BubbleHeader bubble={bubble} />
 
       <div className="flex gap-x-6 w-full mt-10">
-        <BubbleNav />
+        <BubbleNav bubble={bubble} />
         <div className="w-1/4 bg-zinc-500 rounded-lg h-[40vh]"></div>
       </div>
     </div>

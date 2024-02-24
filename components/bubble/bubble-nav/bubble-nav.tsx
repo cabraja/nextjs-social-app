@@ -1,9 +1,14 @@
 "use client";
 
 import useModal from "@/hooks/use-modal";
+import { BubbleWithMembers } from "@/types/prisma";
 import { BadgePlus, Flame, PlusCircle } from "lucide-react";
 
-function BubbleNav() {
+type BubbleNavProps = {
+  bubble: BubbleWithMembers;
+};
+
+function BubbleNav({ bubble }: BubbleNavProps) {
   const { onOpen } = useModal();
 
   return (
@@ -22,7 +27,7 @@ function BubbleNav() {
 
       <div
         onClick={() => {
-          onOpen("createPost");
+          onOpen("createPost", { bubbleId: bubble.id });
         }}
         className="flex justify-center px-3 py-1 gap-x-1 text-sm font-medium cursor-pointer bg-neutral-100 rounded-full items-center text-black hover:bg-zinc-400 transition"
       >

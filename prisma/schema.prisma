@@ -86,7 +86,7 @@ model Post {
   id          String   @id @default(uuid())
   title       String
   textContent String
-  codeContent String
+  codeContent String?
   bubble      Bubble   @relation(fields: [bubbleId], references: [id])
   bubbleId    String
   owner       Profile  @relation(fields: [profileId], references: [id])

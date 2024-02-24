@@ -45,7 +45,7 @@ const formSchema = z.object({
 
 function CreatePostModal() {
   const [disabled, setDisabled] = useState(false);
-  const { isOpen, type, onClose } = useModal();
+  const { isOpen, type, onClose, data } = useModal();
   const isModalOpen = isOpen && type === "createPost";
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,13 +53,16 @@ function CreatePostModal() {
     defaultValues: {
       title: "",
       textContent: "",
-      codeContent: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setDisabled(true);
-    console.log(values);
+    try {
+      await axios.post(`/api/bubbles/${data.bubbleId}/posts`, values);
+    } catch (error: any) {
+      console.log(error.response);
+    }
     setDisabled(false);
   };
 
