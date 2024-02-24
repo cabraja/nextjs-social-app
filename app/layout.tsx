@@ -6,6 +6,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ModalProvider from "@/components/providers/modal-provider";
 import ToastProvider from "@/components/providers/toast-provider";
+import "highlight.js/styles/default.css";
 
 export const fontSans = FontSans({
   subsets: ["latin"],

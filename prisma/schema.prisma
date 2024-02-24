@@ -35,6 +35,8 @@ model Profile {
   updatedAt DateTime @updatedAt
   members   Member[]
   Bubble    Bubble[]
+  Post      Post[]
+  Like      Like[]
 }
 
 model Bubble {
@@ -50,6 +52,7 @@ model Bubble {
   BubbleTopics BubbleTopics[]
   owner        Profile          @relation(fields: [ownerId], references: [id])
   ownerId      String
+  Post         Post[]
 }
 
 model BubbleTopics {
@@ -77,4 +80,28 @@ model Member {
   updatedAt DateTime @updatedAt
 
   @@id([profileId, bubbleId])
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  title       String
+  textContent String
+  codeContent String
+  bubble      Bubble   @relation(fields: [bubbleId], references: [id])
+  bubbleId    String
+  owner       Profile  @relation(fields: [profileId], references: [id])
+  profileId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  likes       Like[]
+}
+
+model Like {
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+
+  @@id([profileId, postId])
 }

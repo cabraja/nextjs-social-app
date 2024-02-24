@@ -20,7 +20,7 @@ export async function BubbleHeader({ bubble }: BubbleHeaderProps) {
       <div
         className={cn(
           "w-full h-full flex rounded-lg pb-3 px-5 relative",
-          bubble?.coverUrl && "bg-neutral-900/60",
+          bubble?.coverUrl && "bg-neutral-900/70",
           !bubble?.coverUrl && "bg-neutral-900/90"
         )}
       >
@@ -38,6 +38,8 @@ export async function BubbleHeader({ bubble }: BubbleHeaderProps) {
         overflow-hidden
         rounded-full
         translate-y-8
+        border-2
+        bg-slate-500
         "
         >
           {bubble?.owner.userId === user?.id ? (

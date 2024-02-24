@@ -4,7 +4,8 @@ type ModalType =
   | "createBubble"
   | "deleteBubble"
   | "addBubbleImage"
-  | "addBubbleCover";
+  | "addBubbleCover"
+  | "createPost";
 
 type PropsData = {
   bubbleId?: string;

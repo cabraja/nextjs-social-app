@@ -29,6 +29,7 @@ function AddBubbleImageModal() {
   }, [isOpen]);
 
   const handleClose = () => {
+    setFileUrl(null);
     onClose();
   };
 
@@ -77,6 +78,7 @@ function AddBubbleImageModal() {
       toast.success("Success!");
       router.refresh();
       setIsConfirmed(false);
+      setFileUrl(null);
     } catch (error) {
       setIsConfirmed(false);
       toast.error("Error occured.");
