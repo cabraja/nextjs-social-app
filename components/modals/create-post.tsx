@@ -155,6 +155,7 @@ function CreatePostModal() {
                           customStyle={{
                             maxHeight: "200px",
                             overflowY: "scroll",
+                            marginTop: "0.5rem",
                           }}
                         >
                           {field.value}

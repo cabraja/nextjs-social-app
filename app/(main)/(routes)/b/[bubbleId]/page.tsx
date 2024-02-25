@@ -5,8 +5,6 @@ import BubbleNav from "@/components/bubble/bubble-nav/bubble-nav";
 export async function BubblePage({ params }: { params: { bubbleId: string } }) {
   const bubble = await getBubbleById(params.bubbleId);
 
-  if (!bubble) return <div>No bubble</div>;
-
   return (
     <div className="w-full">
       <BubbleHeader bubble={bubble} />
