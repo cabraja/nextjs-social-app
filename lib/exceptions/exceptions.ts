@@ -11,3 +11,10 @@ export class BubbleAccessDeniedError extends Error {
     this.name = "BubbleAccessDeniedError";
   }
 }
+
+export class ServerError extends Error {
+  constructor(message = "Error occured on the server.") {
+    super(message);
+    this.name = "ServerError";
+  }
+}

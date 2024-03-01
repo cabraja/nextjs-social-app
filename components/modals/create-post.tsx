@@ -81,7 +81,7 @@ function CreatePostModal() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-x-2">
             <PlusCircle className="w-6 h-6" />
-            Create a New Post
+            Create New Post
           </DialogTitle>
         </DialogHeader>
         <div className="py-2">
