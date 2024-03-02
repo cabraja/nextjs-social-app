@@ -1,6 +1,14 @@
 import HomepageTrending from "@/components/homepage/homepage-trending";
+import currentProfile from "@/lib/current-profile";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
+  const profile = await currentProfile();
+
+  if (!profile) {
+    redirect("/create-profile");
+  }
+
   return (
     <div className="w-full flex flex-col gap-y-5">
       <div className="w-full">

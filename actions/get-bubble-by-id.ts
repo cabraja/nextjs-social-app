@@ -21,20 +21,5 @@ export default async function getBubbleById(bubbleId: string) {
     throw new BubbleNotFoundError();
   }
 
-  if (bubble.accessType === "PRIVATE") {
-    const profile = await currentProfile();
-
-    if (!profile) {
-      throw new BubbleAccessDeniedError();
-    }
-    const isMember =
-      bubble.members.some((member) => member.profileId === profile.id) ||
-      bubble.ownerId === profile.id;
-
-    if (!isMember) {
-      throw new BubbleAccessDeniedError();
-    }
-  }
-
   return bubble;
 }
