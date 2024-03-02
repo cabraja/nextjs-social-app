@@ -29,6 +29,7 @@ enum BubbleAccessType {
 model Profile {
   id        String   @id @default(uuid())
   userId    String   @unique
+  username  String?  @unique
   email     String   @unique
   imageUrl  String
   createdAt DateTime @default(now())

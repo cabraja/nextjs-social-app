@@ -1,5 +1,6 @@
 import getBubblePosts from "@/actions/get-bubble-posts";
 import CreatePostButton from "../buttons/create-post-button";
+import BubblePost from "./post/bubble-post";
 
 type BubblePostsProps = {
   bubbleId: string;
@@ -8,7 +9,7 @@ type BubblePostsProps = {
 async function BubblePosts({ bubbleId }: BubblePostsProps) {
   const posts = await getBubblePosts(bubbleId);
 
-  if (posts.length !== 0) {
+  if (posts.length === 0) {
     return (
       <div className="w-full mt-5">
         <div className="w-4/5 md:w-3/5 mx-auto py-3 px-5 text-center">
@@ -20,6 +21,16 @@ async function BubblePosts({ bubbleId }: BubblePostsProps) {
       </div>
     );
   }
+
+  return (
+    <div className="w-full mt-5">
+      <div className="w-full flex flex-col gap-y-3">
+        {posts.map((post) => (
+          <BubblePost key={post.id} post={post} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default BubblePosts;

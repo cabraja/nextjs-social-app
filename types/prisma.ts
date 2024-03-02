@@ -5,6 +5,6 @@ export type BubbleWithMembers = Bubble & {
   owner: Profile;
 };
 
-export type PostsWithProfiles = Post & {
+export type PostWithProfile = Post & {
   owner: Profile;
 };
