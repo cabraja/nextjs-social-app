@@ -1,6 +1,5 @@
 import { BubbleWithMembers } from "@/types/prisma";
 import { currentUser } from "@clerk/nextjs";
-import { ImagePlus } from "lucide-react";
 import BubbleHeaderImageAuth from "./bubble-header-image-auth";
 import BubbleHeaderImage from "./bubble-header-image";
 import BubbleHeaderCoverButton from "./bubble-header-cover-button";
@@ -8,9 +7,10 @@ import { cn } from "@/lib/utils";
 
 type BubbleHeaderProps = {
   bubble: BubbleWithMembers;
+  postCount: number;
 };
 
-export async function BubbleHeader({ bubble }: BubbleHeaderProps) {
+export async function BubbleHeader({ bubble, postCount }: BubbleHeaderProps) {
   const user = await currentUser();
   return (
     <div
@@ -62,8 +62,10 @@ export async function BubbleHeader({ bubble }: BubbleHeaderProps) {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-base">14</span>
-              <p className="text-neutral-400 text-sm">Posts</p>
+              <span className="text-base">{postCount}</span>
+              <p className="text-neutral-400 text-sm">
+                {postCount === 1 ? "Post" : "Posts"}
+              </p>
             </div>
           </div>
         </div>

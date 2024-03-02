@@ -1,14 +1,14 @@
 import getBubblePosts from "@/actions/get-bubble-posts";
 import CreatePostButton from "../buttons/create-post-button";
 import BubblePost from "./post/bubble-post";
+import { PostWithProfile } from "@/types/prisma";
 
 type BubblePostsProps = {
   bubbleId: string;
+  posts: PostWithProfile[];
 };
 
-async function BubblePosts({ bubbleId }: BubblePostsProps) {
-  const posts = await getBubblePosts(bubbleId);
-
+async function BubblePosts({ bubbleId, posts }: BubblePostsProps) {
   if (posts.length === 0) {
     return (
       <div className="w-full mt-5">
