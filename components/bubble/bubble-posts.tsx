@@ -6,9 +6,10 @@ import { PostWithProfile } from "@/types/prisma";
 type BubblePostsProps = {
   bubbleId: string;
   posts: PostWithProfile[];
+  sort?: "new" | "hot";
 };
 
-async function BubblePosts({ bubbleId, posts }: BubblePostsProps) {
+async function BubblePosts({ bubbleId, posts, sort }: BubblePostsProps) {
   if (posts.length === 0) {
     return (
       <div className="w-full mt-5">
@@ -24,7 +25,7 @@ async function BubblePosts({ bubbleId, posts }: BubblePostsProps) {
 
   return (
     <div className="w-full mt-5">
-      <div className="w-full flex flex-col gap-y-3">
+      <div className="w-full flex flex-col gap-y-5">
         {posts.map((post) => (
           <BubblePost key={post.id} post={post} />
         ))}

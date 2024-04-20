@@ -2,16 +2,36 @@ import db from "@/lib/db";
 import { ServerError } from "@/lib/exceptions/exceptions";
 import { PostWithProfile } from "@/types/prisma";
 
-export default async function getBubblePosts(bubbleId: string) {
+export default async function getBubblePosts(
+  bubbleId: string,
+  sort: "hot" | "new" | null = null
+) {
   try {
-    const posts: PostWithProfile[] | null = await db.post.findMany({
-      where: {
-        bubbleId: bubbleId,
-      },
-      include: {
-        owner: true,
-      },
-    });
+    let posts: PostWithProfile[] = [];
+    if (!sort) {
+      posts = await db.post.findMany({
+        where: {
+          bubbleId: bubbleId,
+        },
+        include: {
+          owner: true,
+        },
+      });
+    }
+
+    if (sort === "new") {
+      posts = await db.post.findMany({
+        where: {
+          bubbleId: bubbleId,
+        },
+        include: {
+          owner: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
 
     return posts;
   } catch (error) {

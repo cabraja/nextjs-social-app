@@ -28,6 +28,9 @@ import { PlusCircle } from "lucide-react";
 import { Label } from "../ui/label";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { AxiosReponse } from "@/types/axios";
+import { Bubble } from "@prisma/client";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z
@@ -54,13 +57,18 @@ function CreatePostModal() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const loadingToast = toast.loading("Loading...");
     setDisabled(true);
     try {
       await axios.post(`/api/bubbles/${data.bubbleId}/posts`, values);
+      setDisabled(false);
+      onClose();
+      toast.dismiss(loadingToast);
+      toast.success("Post created!");
     } catch (error: any) {
-      console.log(error.response);
+      toast.dismiss(loadingToast);
+      toast.error(error.response.data);
     }
-    setDisabled(false);
   };
 
   const handleClose = () => {
