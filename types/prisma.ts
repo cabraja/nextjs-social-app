@@ -1,4 +1,4 @@
-import { Bubble, Member, Post, Profile } from "@prisma/client";
+import { Bubble, Like, Member, Post, Profile } from "@prisma/client";
 
 export type BubbleWithMembers = Bubble & {
   members: Member[];
@@ -7,4 +7,5 @@ export type BubbleWithMembers = Bubble & {
 
 export type PostWithProfile = Post & {
   owner: Profile;
+  likes: Like[];
 };

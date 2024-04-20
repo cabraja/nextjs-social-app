@@ -5,11 +5,17 @@ import { PostWithProfile } from "@/types/prisma";
 
 type BubblePostsProps = {
   bubbleId: string;
-  posts: PostWithProfile[];
   sort?: "new" | "hot";
 };
 
-async function BubblePosts({ bubbleId, posts, sort }: BubblePostsProps) {
+async function BubblePosts({ bubbleId, sort }: BubblePostsProps) {
+  let posts: PostWithProfile[];
+  if (!sort) {
+    posts = await getBubblePosts(bubbleId);
+  } else {
+    posts = await getBubblePosts(bubbleId, sort);
+  }
+
   if (posts.length === 0) {
     return (
       <div className="w-full mt-5">

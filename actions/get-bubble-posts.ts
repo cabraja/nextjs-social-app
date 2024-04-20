@@ -15,6 +15,7 @@ export default async function getBubblePosts(
         },
         include: {
           owner: true,
+          likes: true,
         },
       });
     }
@@ -26,6 +27,7 @@ export default async function getBubblePosts(
         },
         include: {
           owner: true,
+          likes: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -33,6 +35,20 @@ export default async function getBubblePosts(
       });
     }
 
+    if (sort === "hot") {
+      posts = await db.post.findMany({
+        where: {
+          bubbleId: bubbleId,
+        },
+        include: {
+          owner: true,
+          likes: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+    }
     return posts;
   } catch (error) {
     throw new ServerError();
