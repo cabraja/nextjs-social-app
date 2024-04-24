@@ -4,6 +4,7 @@ import BubbleNav from "@/components/bubble/bubble-nav/bubble-nav";
 import BubblePosts from "@/components/bubble/bubble-posts";
 import { Skeleton } from "@/components/ui/skeleton";
 import currentProfile from "@/lib/current-profile";
+import { PostSort } from "@/types/posts";
 import { redirectToSignIn } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -13,7 +14,7 @@ export async function BubblePage({
   searchParams,
 }: {
   params: { bubbleId: string };
-  searchParams: { sort: "hot" | "new" | undefined };
+  searchParams: { sort: PostSort | undefined };
 }) {
   const profile = await currentProfile();
   if (!profile) {
@@ -21,10 +22,6 @@ export async function BubblePage({
   }
 
   const bubble = await getBubbleById(params.bubbleId);
-
-  if (!profile) {
-    return redirectToSignIn();
-  }
 
   return (
     <div className="w-full">

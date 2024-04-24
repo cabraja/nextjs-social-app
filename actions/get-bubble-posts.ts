@@ -1,26 +1,16 @@
 import db from "@/lib/db";
 import { ServerError } from "@/lib/exceptions/exceptions";
+import { PostSort } from "@/types/posts";
 import { PostWithProfile } from "@/types/prisma";
 
 export default async function getBubblePosts(
   bubbleId: string,
-  sort: "hot" | "new" | null = null
+  sort: PostSort | null = null
 ) {
   try {
     let posts: PostWithProfile[] = [];
-    if (!sort) {
-      posts = await db.post.findMany({
-        where: {
-          bubbleId: bubbleId,
-        },
-        include: {
-          owner: true,
-          likes: true,
-        },
-      });
-    }
 
-    if (sort === "new") {
+    if (!sort || sort == "new") {
       posts = await db.post.findMany({
         where: {
           bubbleId: bubbleId,
@@ -36,7 +26,7 @@ export default async function getBubblePosts(
     }
 
     if (sort === "hot") {
-      posts = await db.post.findMany({
+      await db.post.findMany({
         where: {
           bubbleId: bubbleId,
         },
@@ -45,10 +35,13 @@ export default async function getBubblePosts(
           likes: true,
         },
         orderBy: {
-          createdAt: "asc",
+          likes: {
+            _count: "desc",
+          },
         },
       });
     }
+
     return posts;
   } catch (error) {
     throw new ServerError();

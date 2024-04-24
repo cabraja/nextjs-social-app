@@ -2,13 +2,16 @@ import getBubblePosts from "@/actions/get-bubble-posts";
 import CreatePostButton from "../buttons/create-post-button";
 import BubblePost from "./post/bubble-post";
 import { PostWithProfile } from "@/types/prisma";
+import { PostSort } from "@/types/posts";
+import currentProfile from "@/lib/current-profile";
 
 type BubblePostsProps = {
   bubbleId: string;
-  sort?: "new" | "hot";
+  sort?: PostSort;
 };
 
 async function BubblePosts({ bubbleId, sort }: BubblePostsProps) {
+  const profile = await currentProfile();
   let posts: PostWithProfile[];
   if (!sort) {
     posts = await getBubblePosts(bubbleId);
@@ -33,7 +36,7 @@ async function BubblePosts({ bubbleId, sort }: BubblePostsProps) {
     <div className="w-full mt-5">
       <div className="w-full flex flex-col gap-y-5">
         {posts.map((post) => (
-          <BubblePost key={post.id} post={post} />
+          <BubblePost key={post.id} post={post} profile={profile} />
         ))}
       </div>
     </div>

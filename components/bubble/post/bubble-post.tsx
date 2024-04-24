@@ -2,12 +2,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostWithProfile } from "@/types/prisma";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import PostFooter from "./post-footer";
+import { Profile } from "@prisma/client";
 
 type PostProps = {
   post: PostWithProfile;
+  profile: Profile;
 };
 
-function BubblePost({ post }: PostProps) {
+async function BubblePost({ post, profile }: PostProps) {
   return (
     <article className="w-full rounded-lg bg-zinc-900/70 py-4 px-5">
       <header className="flex items-center mb-2">
@@ -39,6 +42,8 @@ function BubblePost({ post }: PostProps) {
           </SyntaxHighlighter>
         </div>
       )}
+
+      <PostFooter post={post} profile={profile} />
     </article>
   );
 }
